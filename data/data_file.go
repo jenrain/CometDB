@@ -2,6 +2,9 @@ package data
 
 import "CometDB/fio"
 
+// DataFileNameSuffix 文件后缀
+const DataFileNameSuffix = ".data"
+
 // DataFile 数据文件
 type DataFile struct {
 	// 当前文件id
@@ -19,8 +22,8 @@ func OpenDataFile(dirPath string, field uint32) (*DataFile, error) {
 	return nil, nil
 }
 
-func (df *DataFile) ReadLogRecord(logOffset int64) (*LogRecord, error) {
-	return nil, nil
+func (df *DataFile) ReadLogRecord(logOffset int64) (*LogRecord, int64, error) {
+	return nil, 0, nil
 }
 
 func (df *DataFile) Write(buf []byte) error {
