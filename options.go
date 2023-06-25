@@ -1,5 +1,7 @@
 package CometDB
 
+import "os"
+
 // Options 配置结构体
 type Options struct {
 	// 数据库数据目录
@@ -24,3 +26,10 @@ const (
 	// ART 自适应基数树索引
 	ART
 )
+
+var DefaultOptions = Options{
+	DirPath:      os.TempDir(),
+	DataFileSize: 256 * 1024 * 1024,
+	SyncWrites:   false,
+	IndexType:    Btree,
+}
