@@ -92,6 +92,35 @@ func (db *DB) Put(key []byte, value []byte) error {
 	return nil
 }
 
+// Delete 根据 key 删除对应的数据
+func (db *DB) Delete(key []byte) error {
+	// 判断key的有效性
+	if len(key) == 0 {
+		return ErrKeyIsEmpty
+	}
+	// 检查key是否存在，不存在直接返回
+	if pos := db.index.Get(key); pos == nil {
+		return nil
+	}
+	// 构造 LogRecord，标识其是被删除的
+	logRecord := &data.LogRecord{
+		Key:  key,
+		Type: data.LogRecordDeleted,
+	}
+	// 写入数据文件
+	_, err := db.appendLogRecord(logRecord)
+	if err != nil {
+		return nil
+	}
+
+	// 从内存索引中将对应的 key 删除
+	ok := db.index.Delete(key)
+	if !ok {
+		return ErrIndexUpdateFailed
+	}
+	return nil
+}
+
 // Get 根据 key 读取数据
 func (db *DB) Get(key []byte) ([]byte, error) {
 	// 判断 key 的有效性
