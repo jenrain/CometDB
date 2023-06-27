@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c229d427-1fe3-4720-999d-4eaee6046cf8" name="变更" comment="添加merge以及hint功能">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/index/index.go" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" url="file:///opt/homebrew/Cellar/go/1.20.5/libexec" />
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file:///opt/homebrew/Cellar/go/1.20.5/libexec/src/encoding/binary/varint.go" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2PeYy5BnsXQTpD7TR79I6542MHh" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultGoTemplateProperty": "Go File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "go.import.settings.migrated": "true",
+    "last_opened_file_path": "/Users/jr/GolandProjects/CometDB/utils",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/utils" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Go 测试.CometDB 中的 TestDB_Iterator_Multi_Values">
+    <configuration name="go build CometDB/examples" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="CometDB" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="CometDB/examples" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/examples/basic_operation.go" />
+      <method v="2" />
+    </configuration>
+    <configuration name="CometDB 中的 TestDB_Iterator_Multi_Values" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="CometDB" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="CometDB" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestDB_Iterator_Multi_Values\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="CometDB/data 中的 TestDataFile_Sync" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="CometDB" />
+      <working_directory value="$PROJECT_DIR$/data" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="CometDB/data" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestDataFile_Sync\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="CometDB/data 中的 TestDataFile_Write" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="CometDB" />
+      <working_directory value="$PROJECT_DIR$/data" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="CometDB/data" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestDataFile_Write\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="CometDB/index 中的 TestBTree_Iterator" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="CometDB" />
+      <working_directory value="$PROJECT_DIR$/index" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="CometDB/index" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestBTree_Iterator\E$" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go 测试.CometDB 中的 TestDB_Iterator_Multi_Values" />
+        <item itemvalue="Go 测试.CometDB/index 中的 TestBTree_Iterator" />
+        <item itemvalue="Go 构建.go build CometDB/examples" />
+        <item itemvalue="Go 测试.CometDB/data 中的 TestDataFile_Sync" />
+        <item itemvalue="Go 测试.CometDB/data 中的 TestDataFile_Write" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="index interface" />
+    <MESSAGE value="btree, implemented index interface" />
+    <MESSAGE value="btree test" />
+    <MESSAGE value="the position of key value pairs on the disk" />
+    <MESSAGE value="初始化数据文件和索引" />
+    <MESSAGE value="readme" />
+    <MESSAGE value="删除对应数据" />
+    <MESSAGE value="读取LogRecord文件" />
+    <MESSAGE value="LogRecord的编码与解码" />
+    <MESSAGE value="功能测试" />
+    <MESSAGE value="创建索引迭代器" />
+    <MESSAGE value="Close Sync" />
+    <MESSAGE value="WriteBatch原子写" />
+    <MESSAGE value="init" />
+    <MESSAGE value="添加merge以及hint功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加merge以及hint功能" />
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+</project>

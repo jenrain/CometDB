@@ -29,9 +29,6 @@ type IndexType = int8
 const (
 	// Btree 索引
 	Btree IndexType = iota + 1
-
-	// ART 自适应基数树索引
-	ART
 )
 
 // NewIndexer 根据类型初始化索引
@@ -39,8 +36,6 @@ func NewIndexer(typ IndexType) Indexer {
 	switch typ {
 	case Btree:
 		return NewBTree()
-	case ART:
-		return nil
 	default:
 		panic("unsupported index type")
 	}
