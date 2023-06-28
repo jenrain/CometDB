@@ -2,8 +2,11 @@ package CometDB
 
 import (
 	"CometDB/data"
+	"CometDB/fio"
 	"CometDB/index"
 	"errors"
+	"fmt"
+	"github.com/gofrs/flock"
 	"io"
 	"os"
 	"path/filepath"
@@ -11,6 +14,10 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+)
+
+const (
+	fileLockName = "flock"
 )
 
 // DB bitcask 存储引擎实例
@@ -37,6 +44,12 @@ type DB struct {
 
 	// 是否正在merge
 	isMerging bool
+
+	// 文件锁保证多进程之间的互斥
+	fileLock *flock.Flock
+
+	// 累计写了多少个字节
+	bytesWrite uint
 }
 
 // Open 打开 bitcask 存储引擎实例
@@ -51,12 +64,24 @@ func Open(options Options) (*DB, error) {
 			return nil, err
 		}
 	}
+
+	// 判断当前数据目录是否正在使用
+	fileLock := flock.New(filepath.Join(options.DirPath, fileLockName))
+	hold, err := fileLock.TryLock()
+	if err != nil {
+		return nil, err
+	}
+	if !hold {
+		return nil, ErrDatabaseIsUsing
+	}
+
 	// 初始化DB实例结构体
 	db := &DB{
 		options:    options,
 		mu:         new(sync.RWMutex),
 		olderFiles: make(map[uint32]*data.DataFile),
 		index:      index.NewIndexer(options.IndexType),
+		fileLock:   fileLock,
 	}
 
 	// 加载 merge 数据目录
@@ -78,6 +103,14 @@ func Open(options Options) (*DB, error) {
 	if err := db.loadIndexFromDataFiles(); err != nil {
 		return nil, err
 	}
+
+	// 重置 IO 类型为标准文件 IO
+	if db.options.MMapAtStartup {
+		if err := db.resetIOType(); err != nil {
+			return nil, err
+		}
+	}
+
 	return db, nil
 }
 
@@ -211,6 +244,11 @@ func (db *DB) Fold(fn func(key []byte, value []byte) bool) error {
 
 // Close 关闭数据库
 func (db *DB) Close() error {
+	defer func() {
+		if err := db.fileLock.Unlock(); err != nil {
+			panic(fmt.Sprintf("fail to unlock file lock, err: %s", err))
+		}
+	}()
 	if db.activeFile == nil {
 		return nil
 	}
@@ -309,10 +347,19 @@ func (db *DB) appendLogRecord(logRecord *data.LogRecord) (*data.LogRecordPos, er
 		return nil, err
 	}
 
+	db.bytesWrite += uint(size)
 	// 根据用户配置决定是否持久化
-	if db.options.SyncWrites {
+	var needSync = db.options.SyncWrites
+	if !needSync && db.options.BytesPerSync > 0 && db.bytesWrite >= db.options.BytesPerSync {
+		needSync = true
+	}
+	if needSync {
 		if err := db.activeFile.Sync(); err != nil {
 			return nil, err
+		}
+		// 清空累计值
+		if db.bytesWrite > 0 {
+			db.bytesWrite = 0
 		}
 	}
 
@@ -333,7 +380,7 @@ func (db *DB) setActiveDataFile() error {
 	}
 
 	// 打开新的数据文件
-	dataFile, err := data.OpenDataFile(db.options.DirPath, initialFileId)
+	dataFile, err := data.OpenDataFile(db.options.DirPath, initialFileId, fio.StandardFIO)
 	if err != nil {
 		return err
 	}
@@ -378,7 +425,11 @@ func (db *DB) loadDataFiles() error {
 
 	// 遍历每个文件id，打开对应的数据文件
 	for i, fid := range fileIds {
-		dataFile, err := data.OpenDataFile(db.options.DirPath, uint32(fid))
+		ioType := fio.StandardFIO
+		if db.options.MMapAtStartup {
+			ioType = fio.MemoryMap
+		}
+		dataFile, err := data.OpenDataFile(db.options.DirPath, uint32(fid), ioType)
 		if err != nil {
 			return err
 		}
@@ -493,6 +544,23 @@ func (db *DB) loadIndexFromDataFiles() error {
 		// 如果是当前活跃文件，更新这个文件的 WriteOff
 		if i == len(db.fileIds)-1 {
 			db.activeFile.WriteOff = offset
+		}
+	}
+	return nil
+}
+
+func (db *DB) resetIOType() error {
+	if db.activeFile == nil {
+		return nil
+	}
+
+	if err := db.activeFile.SetIOManager(db.options.DirPath, fio.StandardFIO); err != nil {
+		return err
+	}
+
+	for _, olderFile := range db.olderFiles {
+		if err := olderFile.SetIOManager(db.options.DirPath, fio.StandardFIO); err != nil {
+			return err
 		}
 	}
 	return nil
