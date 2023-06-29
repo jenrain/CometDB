@@ -2,6 +2,7 @@ package CometDB
 
 import (
 	"CometDB/data"
+	"CometDB/utils"
 	"io"
 	"os"
 	"path"
@@ -26,6 +27,29 @@ func (db *DB) Merge() error {
 		db.mu.Unlock()
 		return ErrMergeIsProgress
 	}
+
+	// 查看可以 merge 的数据量是否达到了阈值
+	totalSize, err := utils.DirSize(db.options.DirPath)
+	if err != nil {
+		db.mu.Unlock()
+		return err
+	}
+	if float32(db.reclaimSize)/float32(totalSize) < db.options.DataFileMergeRatio {
+		db.mu.Unlock()
+		return ErrMergeRatioUnreached
+	}
+
+	// 查看剩余的空间容量是否可以容纳 merge 之后的数据量
+	availableDiskSize, err := utils.AvailableDiskSize()
+	if err != nil {
+		db.mu.Unlock()
+		return err
+	}
+	if uint64(totalSize-db.reclaimSize) >= availableDiskSize {
+		db.mu.Unlock()
+		return ErrNoEnoughSpaceForMerge
+	}
+
 	db.isMerging = true
 	defer func() {
 		db.isMerging = false
@@ -178,6 +202,10 @@ func (db *DB) loadMergeFiles() error {
 		if entry.Name() == data.MergeFinishedFileName {
 			mergeFinished = true
 			break
+		}
+		// 跳过标识文件锁的目录
+		if entry.Name() == fileLockName {
+			continue
 		}
 		mergeFileNames = append(mergeFileNames, entry.Name())
 	}
