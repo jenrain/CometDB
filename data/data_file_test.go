@@ -68,7 +68,7 @@ func TestDataFile_ReadLogRecord(t *testing.T) {
 	// 只有一条 LogRecord
 	rec1 := &LogRecord{
 		Key:   []byte("name"),
-		Value: []byte("bitcask kv go"),
+		Value: []byte("cometDB kv go"),
 	}
 	res1, size1 := EncodeLogRecord(rec1)
 	err = dataFile.Write(res1)

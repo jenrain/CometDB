@@ -2,7 +2,9 @@ package utils
 
 import (
 	"io/fs"
+	"os"
 	"path/filepath"
+	"strings"
 	"syscall"
 )
 
@@ -32,4 +34,46 @@ func AvailableDiskSize() (uint64, error) {
 		return 0, err
 	}
 	return stat.Bavail * uint64(stat.Bsize), nil
+}
+
+// CopyDir 拷贝数据目录
+func CopyDir(src, dest string, exclude []string) error {
+	// 目标不存在就创建
+	if _, err := os.Stat(dest); os.IsNotExist(err) {
+		if err := os.MkdirAll(dest, os.ModePerm); err != nil {
+			return err
+		}
+	}
+
+	// 递归遍历源目录下的所有文件
+	return filepath.Walk(src, func(path string, info fs.FileInfo, err error) error {
+		// 取出路径中 src 之后的部分
+		fileName := strings.Replace(path, src, "", 1)
+		if fileName == "" {
+			return nil
+		}
+
+		// 遍历排除的目录
+		for _, e := range exclude {
+			// 匹配是否包含排除的目录
+			matched, err := filepath.Match(e, info.Name())
+			if err != nil {
+				return err
+			}
+			if matched {
+				return nil
+			}
+		}
+
+		// 如果是目录，就直接创建目录下的所有文件
+		if info.IsDir() {
+			return os.MkdirAll(filepath.Join(dest, fileName), info.Mode())
+		}
+
+		data, err := os.ReadFile(filepath.Join(src, fileName))
+		if err != nil {
+			return err
+		}
+		return os.WriteFile(filepath.Join(dest, fileName), data, info.Mode())
+	})
 }

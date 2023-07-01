@@ -10,7 +10,7 @@ func TestEncodeLogRecord(t *testing.T) {
 	// 正常情况
 	rec1 := &LogRecord{
 		Key:   []byte("name"),
-		Value: []byte("bitcask-go"),
+		Value: []byte("cometDB"),
 		Type:  LogRecordNormal,
 	}
 	res1, n1 := EncodeLogRecord(rec1)
@@ -29,7 +29,7 @@ func TestEncodeLogRecord(t *testing.T) {
 	// 对 Deleted 情况的测试
 	rec3 := &LogRecord{
 		Key:   []byte("name"),
-		Value: []byte("bitcask-go"),
+		Value: []byte("cometDB"),
 		Type:  LogRecordDeleted,
 	}
 	res3, n3 := EncodeLogRecord(rec3)
@@ -69,7 +69,7 @@ func TestDecodeLogRecordHeader(t *testing.T) {
 func TestGetLogRecordCRC(t *testing.T) {
 	rec1 := &LogRecord{
 		Key:   []byte("name"),
-		Value: []byte("bitcask-go"),
+		Value: []byte("cometDB"),
 		Type:  LogRecordNormal,
 	}
 	headerBuf1 := []byte{104, 82, 240, 150, 0, 8, 20}
@@ -86,7 +86,7 @@ func TestGetLogRecordCRC(t *testing.T) {
 
 	rec3 := &LogRecord{
 		Key:   []byte("name"),
-		Value: []byte("bitcask-go"),
+		Value: []byte("cometDB"),
 		Type:  LogRecordDeleted,
 	}
 	headerBuf3 := []byte{43, 153, 86, 17, 1, 8, 20}
