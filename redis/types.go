@@ -35,6 +35,10 @@ func NewRedisObject(options CometDB.Options) (*RedisObject, error) {
 	return &RedisObject{db: db}, nil
 }
 
+func (r *RedisObject) Close() error {
+	return r.db.Close()
+}
+
 func (r *RedisObject) Del(key []byte) error {
 	return r.db.Delete(key)
 }
