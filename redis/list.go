@@ -45,6 +45,14 @@ func (r *RedisObject) RPop(key []byte) ([]byte, error) {
 	return r.popInner(key, false)
 }
 
+func (r *RedisObject) LLen(key []byte) (uint32, error) {
+	meta, err := r.findMetadata(key, List)
+	if err != nil {
+		return 0, err
+	}
+	return meta.size, nil
+}
+
 func (r *RedisObject) pushInner(key, element []byte, isLeft bool) (uint32, error) {
 	// 查找元数据
 	meta, err := r.findMetadata(key, List)

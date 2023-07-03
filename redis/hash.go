@@ -114,3 +114,11 @@ func (r *RedisObject) HDel(key, field []byte) (bool, error) {
 
 	return exist, nil
 }
+
+func (r *RedisObject) HLen(key []byte) (uint32, error) {
+	meta, err := r.findMetadata(key, Hash)
+	if err != nil {
+		return 0, err
+	}
+	return meta.size, nil
+}

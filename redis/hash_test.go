@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRedisDataStructure_HGet(t *testing.T) {
+func TestRedisObject_HGet(t *testing.T) {
 	opts := CometDB.DefaultOptions
 	dir, _ := os.MkdirTemp("", "CometDB-redis-hget")
 	opts.DirPath = dir
@@ -41,7 +41,7 @@ func TestRedisDataStructure_HGet(t *testing.T) {
 	assert.Equal(t, CometDB.ErrKeyNotFound, err)
 }
 
-func TestRedisDataStructure_HDel(t *testing.T) {
+func TestRedisObject_HDel(t *testing.T) {
 	opts := CometDB.DefaultOptions
 	dir, _ := os.MkdirTemp("", "CometDB-redis-hdel")
 	opts.DirPath = dir

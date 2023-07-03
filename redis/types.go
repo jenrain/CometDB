@@ -22,6 +22,10 @@ const (
 	ZSet
 )
 
+const (
+	NoExpire int64 = -1
+)
+
 type RedisObject struct {
 	db *CometDB.DB
 }
@@ -39,26 +43,8 @@ func (r *RedisObject) Close() error {
 	return r.db.Close()
 }
 
-func (r *RedisObject) Del(key []byte) error {
-	return r.db.Delete(key)
-}
-
-func (r *RedisObject) Type(key []byte) (redisObjectType, error) {
-	encValue, err := r.db.Get(key)
-	if err != nil {
-		return 0, err
-	}
-
-	if len(encValue) == 0 {
-		return 0, errors.New("value is null")
-	}
-
-	// 第一个字节就是类型
-	return encValue[0], nil
-}
-
 const (
-	maxMetadataSize   = 1 + binary.MaxVarintLen64*2 + binary.MaxVarintLen32
+	maxmetaDataSize   = 1 + binary.MaxVarintLen64*2 + binary.MaxVarintLen32
 	extraListMetaSize = binary.MaxVarintLen64 * 2
 
 	initialListMark = math.MaxUint64 / 2
@@ -80,7 +66,7 @@ type metaData struct {
 }
 
 func (m *metaData) encode() []byte {
-	var size = maxMetadataSize
+	var size = maxmetaDataSize
 	if m.dataType == List {
 		size += extraListMetaSize
 	}
@@ -97,13 +83,13 @@ func (m *metaData) encode() []byte {
 		index += binary.PutUvarint(buf[index:], m.tail)
 	}
 
-	return buf[index:]
+	return buf[:index]
 }
 
-func decodeMetadata(buf []byte) *metaData {
+func decodemetaData(buf []byte) *metaData {
 	dataType := buf[0]
 
-	index := 1
+	var index = 1
 	expire, n := binary.Varint(buf[index:])
 	index += n
 	version, n := binary.Varint(buf[index:])
@@ -111,7 +97,8 @@ func decodeMetadata(buf []byte) *metaData {
 	size, n := binary.Varint(buf[index:])
 	index += n
 
-	var head, tail uint64
+	var head uint64 = 0
+	var tail uint64 = 0
 	if dataType == List {
 		head, n = binary.Uvarint(buf[index:])
 		index += n
@@ -140,7 +127,7 @@ func (r *RedisObject) findMetadata(key []byte, dataType redisObjectType) (*metaD
 	if err == CometDB.ErrKeyNotFound {
 		exist = false
 	} else {
-		meta = decodeMetadata(metaBuf)
+		meta = decodemetaData(metaBuf)
 		// 判断数据类型
 		if meta.dataType != dataType {
 			return nil, ErrWrongTypeOperation

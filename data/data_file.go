@@ -98,7 +98,7 @@ func (df *DataFile) ReadLogRecord(offset int64) (*LogRecord, int64, error) {
 
 	// 取出对应的 key 和 value 的长度
 	keySize, valueSize := int64(header.keySize), int64(header.valueSize)
-	recordSize := keySize + valueSize
+	recordSize := headerSize + keySize + valueSize
 
 	logRecord := &LogRecord{
 		Type: header.recordType,

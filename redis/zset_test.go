@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRedisDataStructure_ZScore(t *testing.T) {
+func TestRedisObject_ZScore(t *testing.T) {
 	opts := CometDB.DefaultOptions
 	dir, _ := os.MkdirTemp("", "CometDB-redis-zset")
 	opts.DirPath = dir

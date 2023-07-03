@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestRedisDataStructure_Get(t *testing.T) {
+func TestRedisObject_Get(t *testing.T) {
 	opts := CometDB.DefaultOptions
 	dir, _ := os.MkdirTemp("", "CometDB-redis-get")
 	opts.DirPath = dir
@@ -37,7 +37,7 @@ func TestRedisDataStructure_Get(t *testing.T) {
 	t.Log(string(val3))
 }
 
-func TestRedisDataStructure_Del_Type(t *testing.T) {
+func TestRedisObject_Del_Type(t *testing.T) {
 	opts := CometDB.DefaultOptions
 	dir, _ := os.MkdirTemp("", "CometDB-redis-del-type")
 	opts.DirPath = dir

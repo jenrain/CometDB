@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRedisDataStructure_SIsMember(t *testing.T) {
+func TestRedisObject_SIsMember(t *testing.T) {
 	opts := CometDB.DefaultOptions
 	dir, _ := os.MkdirTemp("", "CometDB-redis-sismember")
 	opts.DirPath = dir
@@ -39,7 +39,7 @@ func TestRedisDataStructure_SIsMember(t *testing.T) {
 	assert.False(t, ok)
 }
 
-func TestRedisDataStructure_SRem(t *testing.T) {
+func TestRedisObject_SRem(t *testing.T) {
 	opts := CometDB.DefaultOptions
 	dir, _ := os.MkdirTemp("", "CometDB-redis-srem")
 	opts.DirPath = dir

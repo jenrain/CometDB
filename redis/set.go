@@ -118,3 +118,11 @@ func (r *RedisObject) SRem(key, member []byte) (bool, error) {
 	}
 	return true, nil
 }
+
+func (r *RedisObject) SCard(key []byte) (uint32, error) {
+	meta, err := r.findMetadata(key, Set)
+	if err != nil {
+		return 0, err
+	}
+	return meta.size, nil
+}

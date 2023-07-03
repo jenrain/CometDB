@@ -49,3 +49,25 @@ func (r *RedisObject) Get(key []byte) ([]byte, error) {
 	}
 	return encValue[index:], nil
 }
+
+func (r *RedisObject) StrLen(key []byte) (uint32, error) {
+	encValue, err := r.db.Get(key)
+	if err != nil {
+		return 0, err
+	}
+
+	// 解码
+	dataType := encValue[0]
+	if dataType != String {
+		return 0, ErrWrongTypeOperation
+	}
+
+	var index = 1
+	expire, n := binary.Varint(encValue[index:])
+	index += n
+	// 判断是否过期
+	if expire > 0 && expire <= time.Now().UnixNano() {
+		return 0, nil
+	}
+	return uint32(len(encValue) - index), nil
+}
