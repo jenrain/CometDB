@@ -2,7 +2,7 @@
 
 ## 简介
 
-CometDB 是一个高性能 KV 存储引擎，基于 bitcask 存储模型实现，数据以 append only 的方式追加写磁盘保证顺序 IO，内存中维护一棵 B+ 树索引帮助快速定位数据。
+CometDB 是一个高性能 KV 存储引擎，基于 bitcask 存储模型实现，数据以 append only 的方式追加写磁盘保证顺序 IO，内存中维护一棵 B 树索引帮助快速定位数据。
 
 比内存数据库例如 Redis 有更高的可靠性，比磁盘数据库例如 MySQL 有更高的性能，比内存映射数据库例如 BoltDB 无随机 IO。
 
